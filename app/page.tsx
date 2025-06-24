@@ -74,9 +74,7 @@ export default function Component() {
 
   // Save links to localStorage whenever links change
   useEffect(() => {
-    if (links.length > 0) {
-      localStorage.setItem("vibecoded-links", JSON.stringify(links))
-    }
+    localStorage.setItem("vibecoded-links", JSON.stringify(links))
   }, [links])
 
   const [newTitle, setNewTitle] = useState("")
