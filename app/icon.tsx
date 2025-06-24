@@ -26,7 +26,7 @@ export default function Icon() {
         borderRadius: "8px", // Slightly rounded corners for the icon
       }}
     >
-      VL
+      🚀
     </div>,
     // ImageResponse options
     {
