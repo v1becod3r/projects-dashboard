@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -23,20 +23,62 @@ interface Link {
 }
 
 export default function Component() {
-  const [links, setLinks] = useState<Link[]>([
-    {
-      id: "1",
-      title: "Portfolio Website",
-      url: "https://example.com/portfolio",
-      createdAt: new Date(),
-    },
-    {
-      id: "2",
-      title: "React Dashboard Project",
-      url: "https://example.com/dashboard",
-      createdAt: new Date(),
-    },
-  ])
+  const [links, setLinks] = useState<Link[]>([])
+
+  // Load links from localStorage on component mount
+  useEffect(() => {
+    const savedLinks = localStorage.getItem("vibecoded-links")
+    if (savedLinks) {
+      try {
+        const parsedLinks = JSON.parse(savedLinks).map((link: any) => ({
+          ...link,
+          createdAt: new Date(link.createdAt),
+        }))
+        setLinks(parsedLinks)
+      } catch (error) {
+        console.error("Error loading links from localStorage:", error)
+        // If there's an error, set default links
+        setLinks([
+          {
+            id: "1",
+            title: "Portfolio Website",
+            url: "https://example.com/portfolio",
+            createdAt: new Date(),
+          },
+          {
+            id: "2",
+            title: "React Dashboard Project",
+            url: "https://example.com/dashboard",
+            createdAt: new Date(),
+          },
+        ])
+      }
+    } else {
+      // Set default links if no saved data
+      setLinks([
+        {
+          id: "1",
+          title: "Portfolio Website",
+          url: "https://example.com/portfolio",
+          createdAt: new Date(),
+        },
+        {
+          id: "2",
+          title: "React Dashboard Project",
+          url: "https://example.com/dashboard",
+          createdAt: new Date(),
+        },
+      ])
+    }
+  }, [])
+
+  // Save links to localStorage whenever links change
+  useEffect(() => {
+    if (links.length > 0) {
+      localStorage.setItem("vibecoded-links", JSON.stringify(links))
+    }
+  }, [links])
+
   const [newTitle, setNewTitle] = useState("")
   const [newUrl, setNewUrl] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
